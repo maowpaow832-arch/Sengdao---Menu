@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="lo">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b0906">
+<title>ແສງດາວ ປີ້ງຫູໝູ - ເມນູອາຫານ</title>
+<link rel="icon" href="Icon/Favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Lao:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --g1:#fff1bd; --g2:#e9b94a; --g3:#b07d1c;
+  --gold:linear-gradient(135deg,#fff1bd 0%,#e9b94a 50%,#b07d1c 100%);
+  --line:rgba(255,255,255,.15);
+  --pw:min(100vw,720px);
+  --cell:calc(var(--pw) / 2);
+  --tabs-h:64px;
+  --ease:cubic-bezier(.22,.9,.24,1);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scrollbar-gutter:stable;-webkit-text-size-adjust:100%}
+html.lock{overflow:hidden}
+body{
+  position:relative;margin:0;min-height:100vh;color:var(--g1);
+  font-family:'Noto Sans Lao','Phetsarath OT','Saysettha OT',system-ui,sans-serif;
+  background:
+    radial-gradient(ellipse at 0 0,rgba(233,185,74,.14),transparent 45%),
+    radial-gradient(ellipse at 100% 100%,rgba(233,185,74,.10),transparent 45%),
+    repeating-linear-gradient(45deg,rgba(255,255,255,.018) 0 2px,transparent 2px 6px),
+    #0b0906;
+  padding-bottom:env(safe-area-inset-bottom);
+}
+body.has-bg{background:#080704}
+/* ພື້ນຫຼັງ: ສ່ວນເທິງ (ໂລໂກ້) ແລະ ສ່ວນລຸ່ມ (ໃບໄມ້ທອງ) ເລື່ອນໄປກັບໜ້າ */
+.bg{
+  position:absolute;left:0;right:0;margin:0 auto;width:var(--pw);height:calc(var(--pw)*.9);
+  z-index:-1;pointer-events:none;display:none;
+  background-repeat:no-repeat;background-size:var(--pw) auto;
+}
+body.has-bg .bg{display:block}
+.bg-top{top:0;background-position:center top;-webkit-mask-image:linear-gradient(#000 72%,transparent);mask-image:linear-gradient(#000 72%,transparent)}
+.bg-bottom{bottom:0;background-position:center bottom;-webkit-mask-image:linear-gradient(transparent,#000 28%);mask-image:linear-gradient(transparent,#000 28%)}
+button{font:inherit;color:inherit}
+
+/* ---------- ບ່ອນວ່າງໃຕ້ໂລໂກ້ (ໂລໂກ້ຢູ່ໃນຮູບພື້ນຫຼັງ) ---------- */
+.top-space{height:calc(var(--pw)*.37 + env(safe-area-inset-top))}
+.foot-space{height:calc(var(--pw)*.3)}
+.ico{display:block;object-fit:cover;user-select:none;-webkit-user-drag:none}
+.ico.blend{mix-blend-mode:screen}
+
+/* ---------- Category tabs ---------- */
+.tabs{
+  position:sticky;top:0;z-index:20;display:flex;justify-content:center;gap:12px;
+  padding:calc(10px + env(safe-area-inset-top)) 14px 10px;
+  background:linear-gradient(rgba(8,6,4,.9),rgba(8,6,4,.72));
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+}
+.tab{
+  display:inline-flex;align-items:center;gap:8px;
+  cursor:pointer;font-weight:700;font-size:1.02rem;padding:6px 20px 6px 12px;border-radius:999px;
+  color:#8f6f2c;background:rgba(40,30,12,.45);border:1px solid rgba(176,125,28,.35);
+  transition:color .25s,box-shadow .25s,border-color .25s,background .25s;
+}
+.tab[hidden]{display:none}
+.tab .ico{width:30px;height:30px}
+.tab:not(.on) .ico{opacity:.55}
+.emo.tab-ico{font-size:1.2rem;line-height:1}
+.tab.on{
+  color:var(--g1);background:rgba(60,42,10,.6);border:1px solid #e9b94a;
+  box-shadow:0 0 0 1px rgba(233,185,74,.3),0 0 16px rgba(233,185,74,.45),inset 0 0 10px rgba(233,185,74,.18);
+}
+.tab:focus-visible,.cell:focus-visible,.d-back:focus-visible{outline:2px solid var(--g2);outline-offset:3px}
+
+/* ---------- Sections ---------- */
+.wrap{max-width:720px;margin:0 auto}
+.sec{scroll-margin-top:var(--tabs-h)}
+.sec-head{display:flex;align-items:center;gap:14px;padding:30px 18px 20px}
+.rule{flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(233,185,74,.7))}
+.rule:last-child{background:linear-gradient(270deg,transparent,rgba(233,185,74,.7))}
+.sec-ico{width:78px;height:78px;flex:none;filter:drop-shadow(0 0 10px rgba(233,185,74,.35))}
+.emo.sec-ico{display:grid;place-items:center;font-size:2rem;border:1.5px solid var(--g2);border-radius:50%;width:60px;height:60px;box-shadow:0 0 14px rgba(233,185,74,.4)}
+.sec-t{text-align:center}
+.sec-t .lo{font-size:clamp(1.5rem,5.5vw,2.1rem);font-weight:800;line-height:1.2;background:var(--gold);-webkit-background-clip:text;background-clip:text;color:transparent}
+.sec-t .en{font-size:.78rem;letter-spacing:.34em;color:var(--g3);font-weight:600;margin-top:2px;padding-left:.34em}
+
+/* ---------- Menu grid (images only, no frames) ---------- */
+.grid{display:grid;grid-template-columns:1fr 1fr}
+.cell{
+  position:relative;display:block;width:100%;aspect-ratio:1;padding:0;margin:0;cursor:pointer;
+  appearance:none;-webkit-appearance:none;background:none;border:0;
+  border-bottom:1px solid var(--line);
+  --pad:7%;
+}
+.cell:nth-child(odd){border-right:1px solid var(--line)}
+.cell.last{border-bottom-color:transparent}
+.cell.last:nth-child(odd):last-child{border-right-color:transparent}
+.cell.loading{cursor:progress}
+.cell.loading::after{
+  content:'';position:absolute;inset:22%;border-radius:50%;background:rgba(233,185,74,.08);
+  animation:pulse 1.1s ease-in-out infinite alternate;
+}
+@keyframes pulse{from{opacity:.35}to{opacity:1}}
+@keyframes fadein{from{opacity:0}to{opacity:1}}
+.pic{
+  position:absolute;left:var(--pad);top:var(--pad);
+  width:calc(100% - 2*var(--pad));height:calc(100% - 2*var(--pad));
+  object-fit:contain;display:block;user-select:none;-webkit-user-drag:none;
+  animation:fadein .4s ease-out;
+}
+.pic.cut,.d-img.cut{filter:drop-shadow(0 8px 14px rgba(0,0,0,.45))}
+.pic.circle,.d-img.circle{object-fit:cover;border-radius:50%}
+.pic.emoji{display:grid;place-items:center;line-height:1;font-size:calc(var(--cell)*.533*.62)}
+.cell.ghost .pic{opacity:0;animation:none}
+
+.state{text-align:center;color:var(--g3);padding:60px 24px;font-size:1.05rem;line-height:1.8}
+
+/* ---------- Detail view ---------- */
+#detail{position:fixed;inset:0;z-index:100;display:grid;grid-template-columns:1fr 1fr}
+#detail[hidden]{display:none}
+.d-backdrop{position:absolute;inset:0;background:rgba(8,6,3,.86);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.d-left,.d-right{position:relative;z-index:1;min-width:0;min-height:0}
+.d-left{display:flex;padding:7vmin}
+.d-slot{flex:1;min-width:0;min-height:0}
+.d-right{display:flex;align-items:center;padding:7vmin 7vmin 7vmin 3vmin}
+.d-info{max-width:100%}
+.d-name{
+  margin:0;font-size:clamp(1.9rem,4.4vw,3.8rem);font-weight:800;line-height:1.25;overflow-wrap:anywhere;
+  background:var(--gold);-webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.d-line{width:min(260px,60%);height:1px;margin:20px 0 18px;background:linear-gradient(90deg,#e9b94a,rgba(233,185,74,.1))}
+.d-price{font-size:clamp(1.4rem,3.2vw,2.4rem);font-weight:700;color:var(--g2)}
+#detail.no-price .d-line,#detail.no-price .d-price{display:none}
+.d-img{
+  position:fixed;z-index:2;margin:0;max-width:none;object-fit:contain;transform-origin:0 0;
+  user-select:none;-webkit-user-drag:none;
+}
+.d-img.emoji{display:block;text-align:center}
+.d-back{
+  position:fixed;z-index:3;top:calc(10px + env(safe-area-inset-top));left:calc(10px + env(safe-area-inset-left));
+  display:inline-flex;align-items:center;gap:6px;
+  cursor:pointer;padding:4px 18px 4px 8px;border-radius:999px;font-weight:700;color:var(--g1);
+  background:rgba(0,0,0,.4);border:1px solid rgba(233,185,74,.55);
+}
+.d-back .ico{width:38px;height:38px}
+@media (orientation:portrait) and (max-width:900px){
+  #detail{grid-template-columns:1fr;grid-template-rows:1fr 1fr}
+  .d-left{padding:calc(70px + env(safe-area-inset-top)) 6vmin 3vmin}
+  .d-right{padding:3vmin 8vmin 8vmin;justify-content:center;text-align:center}
+  .d-line{margin-left:auto;margin-right:auto;background:linear-gradient(90deg,transparent,#e9b94a,transparent)}
+  .d-name{font-size:clamp(1.6rem,7vw,2.6rem)}
+  .d-price{font-size:clamp(1.3rem,5.5vw,2rem)}
+}
+@media (prefers-reduced-motion:reduce){
+  .pic,.cell.loading::after{animation:none}
+  .tab{transition:none}
+}
+</style>
+</head>
+<body>
+
+<div class="bg bg-top" aria-hidden="true"></div>
+<div class="bg bg-bottom" aria-hidden="true"></div>
+<div class="top-space" aria-hidden="true"></div>
+
+<nav class="tabs" id="tabs" aria-label="ໝວດເມນູ">
+  <button class="tab on" type="button" data-target="sec-food">ອາຫານ</button>
+  <button class="tab" type="button" data-target="sec-drink">ເຄື່ອງດື່ມ</button>
+</nav>
+
+<main class="wrap" id="app">
+  <p class="state">ກຳລັງໂຫຼດເມນູ…</p>
+  <noscript><p class="state">ກະລຸນາເປີດ JavaScript ເພື່ອເບິ່ງເມນູ</p></noscript>
+</main>
+<div class="foot-space" aria-hidden="true"></div>
+
+<div id="detail" hidden role="dialog" aria-modal="true" aria-label="ລາຍລະອຽດເມນູ">
+  <div class="d-backdrop"></div>
+  <button class="d-back" type="button" aria-label="ກັບຄືນ"><span class="back-ico"></span><span>ກັບຄືນ</span></button>
+  <div class="d-left"><div class="d-slot"></div></div>
+  <div class="d-right"><div class="d-info"><h2 class="d-name"></h2><div class="d-line"></div><div class="d-price"></div></div></div>
+</div>
+
+<script>
+(function(){
+'use strict';
+
+var EXT=/\.(jpe?g|jfif|png|webp|gif|avif)$/i;
+var CATS=[
+  {id:'food', icon:'🍽️', lo:'ອາຫານ',     en:'FOOD',  files:['Food','food']},
+  {id:'drink',icon:'🥤', lo:'ເຄື່ອງດື່ມ', en:'DRINKS',files:['Drink','drink']}
+];
+var MAXD=1000;            // ຂະໜາດສູງສຸດຂອງຮູບທີ່ປະມວນຜົນ (px)
+var EASE='cubic-bezier(.22,.9,.24,1)';
+var REDUCE=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/*PURE-START*/
+function fmtPrice(raw){
+  var s=raw.replace(/[.,]+$/,'');
+  if(/^\d+$/.test(s)&&s.length>=4) s=Number(s).toLocaleString('en-US');
+  return s;
+}
+// ຊື່ໄຟລ໌ -> {file,cat,name,price}
+function parseName(file){
+  var base=file.replace(/\.[^.]+$/,'').trim();
+  var cat='food';
+  if(/^A-/i.test(base)){cat='drink';base=base.slice(2).trim();}
+  var name=base,price='';
+  var m=base.match(/^(.*?)\s*([0-9][0-9,.]*)\s*(?:ກີບ|kip|lak|₭)?$/i);
+  if(m&&m[1].trim()){name=m[1].trim();price=fmtPrice(m[2]);}
+  return {file:file,cat:cat,name:name,price:price};
+}
+// ລົບພື້ນຂາວດ້ວຍ flood-fill ຈາກຂອບຮູບ. ສົ່ງຄືນ bounds ຫຼື null (ຖ້າບໍ່ມີພື້ນຂາວ)
+function removeWhite(d,w,h){
+  var N=w*h,x,y,p,i;
+  function isBg(q){
+    var k=q*4;
+    if(d[k+3]<16) return true;
+    var r=d[k],g=d[k+1],b=d[k+2];
+    var mn=Math.min(r,g,b),mx=Math.max(r,g,b);
+    return mn>=228&&mx-mn<=26;
+  }
+  var bc=0,bt=0;
+  function chk(q){bt++;if(isBg(q))bc++;}
+  for(x=0;x<w;x++){chk(x);chk((h-1)*w+x);}
+  for(y=1;y<h-1;y++){chk(y*w);chk(y*w+w-1);}
+  if(bc/bt<0.6) return null;
+
+  var bg=new Uint8Array(N),stack=new Uint32Array(N),sp=0;
+  function push(q){if(!bg[q]&&isBg(q)){bg[q]=1;stack[sp++]=q;}}
+  for(x=0;x<w;x++){push(x);push((h-1)*w+x);}
+  for(y=0;y<h;y++){push(y*w);push(y*w+w-1);}
+  while(sp){
+    p=stack[--sp];x=p%w;y=(p/w)|0;
+    if(x>0)push(p-1);
+    if(x<w-1)push(p+1);
+    if(y>0)push(p-w);
+    if(y<h-1)push(p+w);
+  }
+  // ວົງຂອບນຸ່ມ: ring1 ຕິດພື້ນ, ring2 ຖັດເຂົ້າມາ
+  var ring=new Uint8Array(N),ring2=new Uint8Array(N),dx,dy,nx,ny;
+  for(y=0;y<h;y++)for(x=0;x<w;x++){
+    p=y*w+x;if(bg[p])continue;
+    outer1:for(dy=-1;dy<=1;dy++)for(dx=-1;dx<=1;dx++){
+      nx=x+dx;ny=y+dy;
+      if(nx<0||ny<0||nx>=w||ny>=h)continue;
+      if(bg[ny*w+nx]){ring[p]=1;break outer1;}
+    }
+  }
+  for(y=0;y<h;y++)for(x=0;x<w;x++){
+    p=y*w+x;if(bg[p]||ring[p])continue;
+    outer2:for(dy=-1;dy<=1;dy++)for(dx=-1;dx<=1;dx++){
+      nx=x+dx;ny=y+dy;
+      if(nx<0||ny<0||nx>=w||ny>=h)continue;
+      if(ring[ny*w+nx]){ring2[p]=1;break outer2;}
+    }
+  }
+  var minX=w,minY=h,maxX=-1,maxY=-1;
+  for(p=0;p<N;p++){
+    i=p*4;
+    if(bg[p]){d[i+3]=0;continue;}
+    var t=1;
+    if(d[i+3]>=240){if(ring[p])t=0.45;else if(ring2[p])t=0.8;}
+    if(t<1){
+      for(var c=0;c<3;c++){var v=(d[i+c]-255*(1-t))/t;d[i+c]=v<0?0:v>255?255:v;}
+      d[i+3]=d[i+3]*t;
+    }
+    if(d[i+3]>24){
+      x=p%w;y=(p/w)|0;
+      if(x<minX)minX=x;if(x>maxX)maxX=x;if(y<minY)minY=y;if(y>maxY)maxY=y;
+    }
+  }
+  if(maxX<0) return null;
+  return {x0:Math.max(0,minX-2),y0:Math.max(0,minY-2),x1:Math.min(w-1,maxX+2),y1:Math.min(h-1,maxY+2)};
+}
+function fitRect(b,ar){
+  var w=b.width,h=w/ar;
+  if(h>b.height){h=b.height;w=h*ar;}
+  return {x:b.left+(b.width-w)/2,y:b.top+(b.height-h)/2,w:w,h:h};
+}
+/*PURE-END*/
+
+function $(s){return document.querySelector(s);}
+function el(tag,cls){var e=document.createElement(tag);if(cls)e.className=cls;return e;}
+function dur(ms){return REDUCE?1:ms;}
+/* ຊອກຮູບທີ່ຮອງຮັບທັງ .png ແລະ .jpg (ລອງຕາມລຳດັບ) */
+function findImage(dir,names){
+  var list=[];
+  names.forEach(function(n){['png','jpg','jpeg','webp'].forEach(function(e){list.push(dir+'/'+n+'.'+e);});});
+  return new Promise(function(resolve){
+    var i=0;
+    function next(){
+      if(i>=list.length){resolve(null);return;}
+      var url=list[i++],im=new Image();
+      im.onload=function(){resolve(url);};
+      im.onerror=next;
+      im.src=url;
+    }
+    next();
+  });
+}
+function iconEl(url,fallback,cls){
+  if(url){
+    var im=new Image();im.src=url;im.alt='';im.draggable=false;
+    im.className='ico '+cls+(/\.jpe?g$/i.test(url)?' blend':'');
+    return im;
+  }
+  var s=el('span','emo '+cls);s.textContent=fallback;s.setAttribute('aria-hidden','true');return s;
+}
+function catOf(it){return CATS.filter(function(c){return c.id===it.cat;})[0];}
+
+var app=$('#app'),tabs=$('#tabs'),detail=$('#detail');
+var dBackdrop=$('.d-backdrop'),dSlot=$('.d-slot'),dInfo=$('.d-info'),dName=$('.d-name'),dPrice=$('.d-price'),dBack=$('.d-back');
+var items=[],sections=[],state='closed',cur=null;
+
+/* ---------- ພື້ນຫຼັງ ---------- */
+async function initBackground(){
+  var url=await findImage('Background',['Background','background']);
+  if(!url)return;
+  document.querySelectorAll('.bg').forEach(function(b){b.style.backgroundImage='url("'+url+'")';});
+  document.body.classList.add('has-bg');
+}
+var backUrl=null;
+async function initIcons(){
+  var jobs=CATS.map(function(c){return findImage('Icon',c.files).then(function(u){c.iconUrl=u;});});
+  jobs.push(findImage('Icon',['Back','back']).then(function(u){backUrl=u;}));
+  await Promise.all(jobs);
+  var bi=document.querySelector('.back-ico');
+  bi.replaceWith(iconEl(backUrl,'←','back-ico'));
+}
+
+/* ---------- ອ່ານລາຍຊື່ໄຟລ໌ ---------- */
+async function getFiles(){
+  var h=location.hostname;
+  if(/\.github\.io$/i.test(h)){
+    try{
+      var owner=h.split('.')[0];
+      var seg=location.pathname.split('/').filter(Boolean)[0];
+      var repo=(seg&&!/\.html?$/i.test(seg))?seg:h;
+      var r=await fetch('https://api.github.com/repos/'+owner+'/'+repo+'/contents/menu',{headers:{Accept:'application/vnd.github+json'}});
+      if(r.ok){
+        var j=await r.json();
+        if(Array.isArray(j)){
+          var f=j.filter(function(x){return x.type==='file'&&EXT.test(x.name);}).map(function(x){return x.name;});
+          if(f.length) return f;
+        }
+      }
+    }catch(e){}
+  }
+  try{
+    var r2=await fetch('menu.json',{cache:'no-cache'});
+    if(r2.ok){
+      var j2=await r2.json();
+      if(Array.isArray(j2)) return j2.filter(function(n){return typeof n==='string'&&EXT.test(n);});
+    }
+  }catch(e){}
+  return [];
+}
+
+/* ---------- ປະມວນຜົນຮູບ ---------- */
+function loadImage(url){
+  return new Promise(function(res,rej){
+    var im=new Image();
+    im.onload=function(){res(im);};
+    im.onerror=function(){rej(new Error('load'));};
+    im.src=url;
+  });
+}
+async function processImage(url){
+  var img=await loadImage(url);
+  var W=img.naturalWidth,H=img.naturalHeight;
+  if(!W||!H) throw new Error('empty');
+  var s=Math.min(1,MAXD/Math.max(W,H));
+  var w=Math.max(1,Math.round(W*s)),h=Math.max(1,Math.round(H*s));
+  var c=document.createElement('canvas');c.width=w;c.height=h;
+  var ctx=c.getContext('2d',{willReadFrequently:true});
+  ctx.drawImage(img,0,0,w,h);
+  var circle={mode:'circle',src:url,ar:1};
+  var id;
+  try{id=ctx.getImageData(0,0,w,h);}catch(e){return circle;}
+  var b=removeWhite(id.data,w,h);
+  if(!b) return circle;
+  ctx.putImageData(id,0,0);
+  var cw=b.x1-b.x0+1,ch=b.y1-b.y0+1;
+  var o=document.createElement('canvas');o.width=cw;o.height=ch;
+  o.getContext('2d').drawImage(c,b.x0,b.y0,cw,ch,0,0,cw,ch);
+  var blob=await new Promise(function(r){o.toBlob(r,'image/png');});
+  if(!blob) return circle;
+  return {mode:'cut',src:URL.createObjectURL(blob),ar:cw/ch};
+}
+async function loadItem(it){
+  var res;
+  try{res=await processImage('menu/'+encodeURIComponent(it.file));}
+  catch(e){res={mode:'emoji',ar:1};}
+  it.res=res;
+  var pic;
+  if(res.mode==='emoji'){
+    pic=el('div','pic emoji');pic.textContent=catOf(it).icon;pic.setAttribute('aria-hidden','true');
+  }else{
+    pic=new Image();pic.className='pic '+res.mode;pic.alt='';pic.draggable=false;pic.src=res.src;
+  }
+  it.pic=pic;it.cell.append(pic);it.cell.classList.remove('loading');
+}
+function runQueue(list,limit){
+  var i=0;
+  async function worker(){while(i<list.length){await loadItem(list[i++]);}}
+  for(var k=0;k<limit;k++)worker();
+}
+
+/* ---------- ສ້າງໜ້າເມນູ ---------- */
+function render(){
+  app.innerHTML='';sections=[];
+  if(!items.length){
+    var p=el('p','state');
+    p.textContent='ຍັງບໍ່ມີເມນູ — ອັບໂຫຼດຮູບເຂົ້າໂຟນເດີ menu ເພື່ອສະແດງເມນູ';
+    app.append(p);
+    Array.prototype.forEach.call(tabs.children,function(t){t.hidden=true;});
+    return;
+  }
+  CATS.forEach(function(cat){
+    var list=items.filter(function(i){return i.cat===cat.id;});
+    var tab=tabs.querySelector('[data-target="sec-'+cat.id+'"]');
+    if(!list.length){tab.hidden=true;return;}
+    tab.hidden=false;
+    var sec=el('section','sec');sec.id='sec-'+cat.id;
+    var head=el('div','sec-head');
+    var ic=iconEl(cat.iconUrl,cat.icon,'sec-ico');ic.setAttribute('aria-hidden','true');
+    var st=el('div','sec-t');
+    st.innerHTML='<div class="lo">'+cat.lo+'</div><div class="en">'+cat.en+'</div>';
+    head.append(el('span','rule'),ic,st,el('span','rule'));
+    tab.textContent='';tab.append(iconEl(cat.iconUrl,cat.icon,'tab-ico'),document.createTextNode(cat.lo));
+    var grid=el('div','grid');
+    var lastFrom=list.length-(list.length%2===0?2:1);
+    list.forEach(function(it,idx){
+      var cell=el('button','cell loading');cell.type='button';
+      cell.setAttribute('aria-label',it.name+(it.price?' '+it.price+' ກີບ':''));
+      if(idx>=lastFrom)cell.classList.add('last');
+      cell.addEventListener('click',function(){openDetail(it);});
+      it.cell=cell;grid.append(cell);
+    });
+    sec.append(head,grid);app.append(sec);sections.push(sec);
+  });
+  document.documentElement.style.setProperty('--tabs-h',tabs.offsetHeight+'px');
+  runQueue(items,3);
+  spy();
+}
+
+/* ---------- ແຖບໝວດ ---------- */
+tabs.addEventListener('click',function(e){
+  var b=e.target.closest('.tab');if(!b)return;
+  var t=document.getElementById(b.dataset.target);if(!t)return;
+  setTab(b.dataset.target);
+  t.scrollIntoView({behavior:REDUCE?'auto':'smooth',block:'start'});
+});
+function setTab(id){
+  Array.prototype.forEach.call(tabs.children,function(b){
+    var on=b.dataset.target===id;b.classList.toggle('on',on);
+    if(on)b.setAttribute('aria-current','true');else b.removeAttribute('aria-current');
+  });
+}
+function spy(){
+  if(!sections.length)return;
+  var off=tabs.offsetHeight+30,id=sections[0].id;
+  sections.forEach(function(s){if(s.getBoundingClientRect().top<=off)id=s.id;});
+  if(window.innerHeight+window.scrollY>=document.documentElement.scrollHeight-4)id=sections[sections.length-1].id;
+  setTab(id);
+}
+var ticking=false;
+addEventListener('scroll',function(){
+  if(ticking||state!=='closed')return;ticking=true;
+  requestAnimationFrame(function(){ticking=false;spy();});
+},{passive:true});
+
+/* ---------- ໜ້າລາຍລະອຽດ (Morph ແບບ FLIP) ---------- */
+function makeVisual(it){
+  var v;
+  if(it.res.mode==='emoji'){v=el('div','d-img emoji');v.textContent=catOf(it).icon;v.setAttribute('aria-hidden','true');}
+  else{v=new Image();v.className='d-img '+it.res.mode;v.alt=it.name;v.draggable=false;v.src=it.res.src;}
+  return v;
+}
+function place(v,r,it){
+  v.style.left=r.x+'px';v.style.top=r.y+'px';v.style.width=r.w+'px';v.style.height=r.h+'px';
+  if(it.res.mode==='emoji'){v.style.fontSize=(r.h*.62)+'px';v.style.lineHeight=r.h+'px';}
+}
+function tf(a,b){
+  return 'translate('+(a.x-b.x)+'px,'+(a.y-b.y)+'px) scale('+(a.w/b.w)+')';
+}
+function openDetail(it){
+  if(state!=='closed'||!it.pic)return;
+  state='opening';cur=it;
+  dName.textContent=it.name;
+  dPrice.textContent=it.price?it.price+' ກີບ':'';
+  detail.classList.toggle('no-price',!it.price);
+
+  var first=fitRect(it.pic.getBoundingClientRect(),it.res.ar);
+  detail.hidden=false;
+  document.documentElement.classList.add('lock');
+  var last=fitRect(dSlot.getBoundingClientRect(),it.res.ar);
+  it.lastRect=last;
+
+  var v=makeVisual(it);place(v,last,it);detail.append(v);it.vis=v;
+  it.cell.classList.add('ghost');
+
+  var a=v.animate([{transform:tf(first,last)},{transform:'none'}],{duration:dur(580),easing:EASE});
+  a.onfinish=function(){if(state==='opening')state='open';};
+  dBackdrop.animate([{opacity:0},{opacity:1}],{duration:dur(420),easing:'ease-out',fill:'backwards'});
+  dInfo.animate([{opacity:0,transform:'translateX(28px)'},{opacity:1,transform:'none'}],
+    {duration:dur(460),delay:dur(300),easing:EASE,fill:'backwards'});
+  dBack.animate([{opacity:0},{opacity:1}],{duration:dur(300),delay:dur(200),fill:'backwards'});
+  dBack.focus({preventScroll:true});
+}
+function closeDetail(){
+  if(state==='closed'||state==='closing'||!cur)return;
+  detail.getAnimations({subtree:true}).forEach(function(a){a.finish();});
+  state='closing';
+  var it=cur,v=it.vis;
+  var first=fitRect(it.pic.getBoundingClientRect(),it.res.ar);
+  var last=it.lastRect;
+  var a=v.animate([{transform:'none'},{transform:tf(first,last)}],{duration:dur(480),easing:EASE,fill:'forwards'});
+  dBackdrop.animate([{opacity:1},{opacity:0}],{duration:dur(480),easing:'ease-in',fill:'forwards'});
+  dInfo.animate([{opacity:1,transform:'none'},{opacity:0,transform:'translateX(20px)'}],{duration:dur(200),fill:'forwards'});
+  dBack.animate([{opacity:1},{opacity:0}],{duration:dur(200),fill:'forwards'});
+  a.onfinish=function(){
+    v.remove();detail.hidden=true;
+    detail.getAnimations({subtree:true}).forEach(function(x){x.cancel();});
+    it.cell.classList.remove('ghost');
+    document.documentElement.classList.remove('lock');
+    state='closed';cur=null;
+    it.cell.focus({preventScroll:true});
+    spy();
+  };
+}
+detail.addEventListener('click',function(e){
+  if(e.target.closest('.d-img,.d-name,.d-price')&&!e.target.closest('.d-back'))return;
+  closeDetail();
+});
+addEventListener('keydown',function(e){if(e.key==='Escape')closeDetail();});
+addEventListener('resize',function(){
+  document.documentElement.style.setProperty('--tabs-h',tabs.offsetHeight+'px');
+  if(!cur||state==='closed'||state==='closing')return;
+  var r=fitRect(dSlot.getBoundingClientRect(),cur.res.ar);
+  cur.lastRect=r;place(cur.vis,r,cur);
+});
+
+/* ---------- ເລີ່ມຕົ້ນ ---------- */
+(async function(){
+  initBackground();
+  var pair=await Promise.all([getFiles(),initIcons()]);
+  var files=pair[0];
+  items=files.map(parseName).sort(function(a,b){return a.file.localeCompare(b.file,'lo',{numeric:true});});
+  render();
+})();
+
+})();
+</script>
+</body>
+</html>
