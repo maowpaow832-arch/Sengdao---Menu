@@ -1,0 +1,34 @@
+name: ອັບເດດເມນູ
+
+on:
+  push:
+    paths:
+      - 'menu/**'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: ສ້າງ menu.json
+        run: |
+          mkdir -p menu
+          python3 - <<'EOF'
+          import os, json
+          exts = ('.jpg', '.jpeg', '.jfif', '.png', '.webp', '.gif', '.avif')
+          files = sorted(f for f in os.listdir('menu') if f.lower().endswith(exts))
+          with open('menu.json', 'w', encoding='utf-8') as fh:
+              json.dump(files, fh, ensure_ascii=False, indent=2)
+          EOF
+
+      - name: ບັນທຶກກັບເຂົ້າ repo
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add menu.json
+          git diff --staged --quiet || (git commit -m "update menu.json" && git push)
